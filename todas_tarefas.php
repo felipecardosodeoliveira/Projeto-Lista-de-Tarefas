@@ -1,3 +1,9 @@
+<?php
+
+	$acao = 'recuperar';
+	require 'tarefa_controller.php';
+?>
+
 <html>
 	<head>
 		<meta charset="utf-8" />
@@ -7,6 +13,62 @@
 		<link rel="stylesheet" href="css/estilo.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	
+		<script>
+
+			function editar(id, tarefa) {
+
+				let form = document.createElement('form');
+				form.action = 'tarefa_controller.php?acao=editar';
+				form.method = 'post';
+				form.classList = 'd-flex';
+
+				let input = document.createElement('input');
+				input.type = 'text';
+				input.name = 'tarefa';
+				input.className = 'form-control'
+
+				let inputId = document.createElement('input');
+				inputId.type = 'hidden';
+				inputId.name = 'id';
+				inputId.className = 'form-control';
+				inputId.value = id;
+
+				let button1 = document.createElement('button');
+				button1.type = 'submit';
+				button1.className = 'btn btn-info ml-1 btn-sm';
+				button1.innerHTML = 'Atualizar';
+
+				let button2 = document.createElement('button');
+				button2.type = 'button';
+				button2.className = 'btn btn-danger ml-1 btn-sm';
+				button2.innerHTML = 'Cancelar';
+
+				form.appendChild(input);
+				form.appendChild(inputId);
+
+				form.appendChild(button1);
+				form.appendChild(button2);
+
+				let tarefaContainer = document.getElementById('tarefa_' + id);
+				let conteudoTarefa = tarefaContainer.innerHTML;
+				tarefaContainer.innerHTML = '';
+
+				input.value = tarefa;
+				tarefaContainer.appendChild(form);
+
+				button2.addEventListener('click', function() {
+					tarefaContainer.innerHTML = '';
+					tarefaContainer.innerHTML = conteudoTarefa.trim();
+				});
+
+			}
+
+			function remover (id) {
+				alert(id)
+			}
+		</script>
+	
 	</head>
 
 	<body>
@@ -18,6 +80,19 @@
 				</a>
 			</div>
 		</nav>
+
+		<?php
+			if (isset($_GET['edicao']) && $_GET['edicao'] == 1) {
+		?>
+			
+			<div class="bg-success text-white py-3 d-flex justify-content-center">
+			
+				<h5 class="my-0">Tarefa Alterada Com Sucesso!</h5>
+			
+			</div>
+
+		<?php } ?>
+
 
 		<div class="container app">
 			<div class="row">
@@ -36,23 +111,22 @@
 								<h4>Todas tarefas</h4>
 								<hr />
 
-								<div class="row mb-3 d-flex align-items-center tarefa">
-									<div class="col-sm-9">Lavar o carro (status)</div>
-									<div class="col-sm-3 mt-2 d-flex justify-content-between">
-										<i class="fas fa-trash-alt fa-lg text-danger"></i>
-										<i class="fas fa-edit fa-lg text-info"></i>
-										<i class="fas fa-check-square fa-lg text-success"></i>
-									</div>
-								</div>
+								<?php 
+									foreach ($tarefas as $tarefa) { ?>
 
-								<div class="row mb-3 d-flex align-items-center tarefa">
-									<div class="col-sm-9">Passear com o cachorro (status)</div>
-									<div class="col-sm-3 mt-2 d-flex justify-content-between">
-										<i class="fas fa-trash-alt fa-lg text-danger"></i>
-										<i class="fas fa-edit fa-lg text-info"></i>
-										<i class="fas fa-check-square fa-lg text-success"></i>
+									<div class="row mb-3 d-flex align-items-center tarefa">
+										<div class="col-sm-9" id="tarefa_<?=$tarefa->id; ?>">
+											<?= $tarefa->tarefa . ' (' . ($tarefa->status) . ')' ; ?>
+										</div>
+										
+										<div class="col-sm-3 mt-2 d-flex justify-content-between">
+											<i class="fas fa-trash-alt fa-lg text-danger" onclick="remover(<?=$tarefa->id; ?>)"></i>
+											<i class="fas fa-edit fa-lg text-info" onclick="editar(<?=$tarefa->id; ?>, '<?=$tarefa->tarefa; ?>')"></i>
+											<i class="fas fa-check-square fa-lg text-success"></i>
+										</div>
 									</div>
-								</div>
+
+								<?php } ?>
 								
 							</div>
 						</div>
