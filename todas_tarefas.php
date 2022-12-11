@@ -65,7 +65,22 @@
 			}
 
 			function remover (id) {
-				alert(id)
+				let form = document.createElement('form');
+				form.action = 'tarefa_controller.php?acao=excluir';
+				form.method = 'post';
+
+				let inputId = document.createElement('input');
+				inputId.type = 'hidden';
+				inputId.name = 'id';
+				inputId.value = id;
+
+				form.appendChild(inputId);
+				document.body.appendChild(form);
+
+				if (confirm('Deseja excluir essa tarefa?')) {
+					form.submit();
+				}
+
 			}
 		</script>
 	
@@ -87,7 +102,15 @@
 			
 			<div class="bg-success text-white py-3 d-flex justify-content-center">
 			
-				<h5 class="my-0">Tarefa Alterada Com Sucesso!</h5>
+				<h5 class="my-0">Tarefa Alterada com Sucesso!</h5>
+			
+			</div>
+
+		<?php } else if (isset($_GET['exclusao']) && $_GET['exclusao'] == 1) { ?>
+				
+			<div class="bg-success text-white py-3 d-flex justify-content-center">
+			
+				<h5 class="my-0">Tarefa Removida com Sucesso!</h5>
 			
 			</div>
 

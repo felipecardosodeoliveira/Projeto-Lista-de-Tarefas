@@ -1,6 +1,5 @@
 <?php
 
-
 class TarefaService {
 
     private $conn;
@@ -42,8 +41,10 @@ class TarefaService {
     }
 
     public function remover() {
-
-        
+        $query = 'DELETE FROM tb_tarefas WHERE id=:id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':id', $this->tarefa->__get('id'));
+        $stmt->execute();      
 
     }
 

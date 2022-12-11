@@ -42,6 +42,18 @@ if ($acao == 'inserir') {
 
     header('Location: todas_tarefas.php?edicao=1');
 
+} else if ($acao == 'excluir') {
+
+    $tarefa = new Tarefa();
+    $tarefa->__set('id', $_POST['id']);
+
+    $conn = new Conexao();
+    
+    $tarefaService = new TarefaService($conn, $tarefa);
+    $tarefaService->remover();
+
+    header('Location: todas_tarefas.php?exclusao=1');
+
 }
  
 
