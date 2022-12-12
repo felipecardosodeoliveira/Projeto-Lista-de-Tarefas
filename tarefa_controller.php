@@ -54,6 +54,22 @@ if ($acao == 'inserir') {
 
     header('Location: todas_tarefas.php?exclusao=1');
 
+} else if ($acao == 'concluir') {
+
+    $tarefa = new Tarefa();
+    $tarefa->__set('id', $_POST['id']);
+    $tarefa->__set('id_status', 2);
+
+
+    $conn = new Conexao();
+    
+    $tarefaService = new TarefaService($conn, $tarefa);
+    $tarefaService->concluir();
+
+
+    header('Location: todas_tarefas.php?concluir=1');
+
+
 }
  
 
